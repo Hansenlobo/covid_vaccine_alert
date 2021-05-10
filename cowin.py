@@ -9,6 +9,7 @@ duration = 1000
 while True:
     d_id='286'  #Set district ID 286 for Udupi
     date = today.strftime("%d-%m-%Y")
+    print(date)
     url = 'https://www.cowin.gov.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id='+d_id+'&date='+date   # API URL link
     # print(url)
     response = requests.get(url)
@@ -19,16 +20,20 @@ while True:
     status = False
     for loop in range(total_centers):
         age = data["centers"][loop]["sessions"][0]["min_age_limit"]
-        if age < 18:    #check for age below 18
+        if age <= 18:    #check for age below 18
             print("yayy u got it!")
-            status = True
-            print(data["centers"][loop]["name"])
+            if(data["centers"][loop]["sessions"][0]["available_capacity"]>0):
+                print(data["centers"][loop]["name"])
+                status = True
+
         else:
             print("Better Luck Next time..")
 
     if status == True:
         print("got it")
+        print("===============================================")
         winsound.Beep(frequency, duration) #Beep sound when the condition matches!!
         time.sleep(2)
         winsound.Beep(frequency, duration)  
     time.sleep(90)   #Run Script every 90 seconds
+
